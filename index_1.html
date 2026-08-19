@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>365 Limpezas · Ho'oponopono Harmonia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noite:#181233;
+    --veu:#241B4A;
+    --veu-claro:#2E2460;
+    --aurora:#E4B268;
+    --nevoa:#B4A9DC;
+    --luz:#F4EFE6;
+    --paz:#8FC3AD;
+    --linha:rgba(228,178,104,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Karla',sans-serif;
+    background:radial-gradient(120% 90% at 50% -10%, var(--veu-claro) 0%, var(--veu) 38%, var(--noite) 100%) fixed;
+    color:var(--luz);
+    min-height:100vh;
+    line-height:1.65;
+  }
+  .tela{max-width:640px;margin:0 auto;padding:2.2rem 1.4rem 4rem}
+  .oculto{display:none!important}
+
+  .marca{
+    text-align:center;
+    font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--aurora);font-weight:600;
+  }
+  .marca span{display:block;letter-spacing:.2em;color:var(--nevoa);font-weight:400;margin-top:.35rem;font-size:.68rem;text-transform:none}
+
+  /* ---------- LOGIN ---------- */
+  #login{display:flex;flex-direction:column;justify-content:center;min-height:88vh}
+  .login-caixa{margin-top:3rem}
+  .login-caixa h1{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:2rem;text-align:center;line-height:1.25;margin-bottom:2.2rem;
+  }
+  label{display:block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--nevoa);margin:1.1rem 0 .4rem}
+  input{
+    width:100%;padding:.85rem 1rem;border-radius:10px;
+    border:1px solid rgba(180,169,220,.35);
+    background:rgba(24,18,51,.55);color:var(--luz);
+    font-family:'Karla',sans-serif;font-size:1rem;
+  }
+  input:focus{outline:2px solid var(--aurora);outline-offset:1px;border-color:transparent}
+  button{
+    width:100%;margin-top:1.8rem;padding:.95rem;
+    border:none;border-radius:999px;cursor:pointer;
+    background:var(--aurora);color:var(--noite);
+    font-family:'Karla',sans-serif;font-weight:600;font-size:1rem;letter-spacing:.04em;
+  }
+  button:focus-visible{outline:3px solid var(--luz);outline-offset:2px}
+  button:disabled{opacity:.6;cursor:wait}
+  .erro{margin-top:1rem;text-align:center;font-size:.9rem;color:#F0A9A0;min-height:1.3em}
+  .aviso-login{margin-top:2.2rem;text-align:center;font-size:.82rem;color:var(--nevoa)}
+
+  /* ---------- APP ---------- */
+  header.dia-header{text-align:center;margin-bottom:2.4rem}
+  .data{margin-top:1.6rem;font-size:.9rem;color:var(--nevoa)}
+  .eyebrow{
+    margin-top:.5rem;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--aurora);
+  }
+  .chip-area{
+    display:inline-block;margin-top:1.1rem;padding:.35rem 1rem;
+    border:1px solid var(--linha);border-radius:999px;
+    font-size:.8rem;letter-spacing:.06em;color:var(--luz);
+  }
+  h2.tema{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:clamp(1.9rem,6.5vw,2.6rem);line-height:1.2;
+    text-align:center;margin:1.4rem 0 1.8rem;
+  }
+  .explicacao{font-size:1.04rem;font-weight:300;color:var(--luz)}
+
+  .ritual{
+    margin:2.6rem 0;padding:2rem 1.4rem;
+    border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);
+    text-align:center;
+  }
+  .ritual p.convite{font-size:.98rem;color:var(--nevoa);margin-bottom:1.8rem}
+  .litania{list-style:none}
+  .litania li{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.7rem,7vw,2.3rem);font-weight:500;line-height:1.55;
+    opacity:0;transform:translateY(8px);
+    animation:surgir 1.4s ease forwards;
+  }
+  .litania li:nth-child(1){animation-delay:.4s}
+  .litania li:nth-child(2){animation-delay:1.5s}
+  .litania li:nth-child(3){animation-delay:2.6s}
+  .litania li:nth-child(4){animation-delay:3.7s;color:var(--aurora)}
+  @keyframes surgir{to{opacity:1;transform:none}}
+  .ritual p.nota{margin-top:1.6rem;font-size:.82rem;color:var(--nevoa)}
+
+  .validacao{
+    margin-top:2.4rem;padding:1.6rem 1.5rem;
+    border:1px solid rgba(143,195,173,.4);border-radius:14px;
+    background:rgba(143,195,173,.07);
+    text-align:center;
+  }
+  .validacao .rotulo{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--paz);margin-bottom:.9rem}
+  .validacao p.frase{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+    font-size:1.35rem;line-height:1.5;color:var(--luz);
+  }
+
+  footer{margin-top:3.2rem;text-align:center}
+  .sair{
+    background:none;border:1px solid rgba(180,169,220,.35);color:var(--nevoa);
+    width:auto;padding:.5rem 1.4rem;font-size:.82rem;margin-top:0;
+  }
+  .carregando{text-align:center;color:var(--nevoa);padding:4rem 0}
+
+  @media (prefers-reduced-motion: reduce){
+    .litania li{animation:none;opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login" class="tela oculto">
+  <div class="marca">Ho'oponopono Harmonia<span>365 limpezas · uma por dia</span></div>
+  <div class="login-caixa">
+    <h1>A limpeza de hoje<br>espera por você</h1>
+    <label for="email">E-mail</label>
+    <input id="email" type="email" autocomplete="email" inputmode="email">
+    <label for="senha">Senha</label>
+    <input id="senha" type="password" autocomplete="current-password">
+    <button id="btn-entrar">Entrar</button>
+    <p class="erro" id="erro-login"></p>
+    <p class="aviso-login">Seu acesso é criado na assinatura do programa.<br>A senha chega no seu e-mail de boas-vindas.</p>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="app" class="tela oculto">
+  <header class="dia-header">
+    <div class="marca">Ho'oponopono Harmonia</div>
+    <p class="data" id="data-hoje"></p>
+    <p class="eyebrow" id="eyebrow"></p>
+    <span class="chip-area" id="chip-area"></span>
+  </header>
+
+  <div id="conteudo" class="oculto">
+    <h2 class="tema" id="tema"></h2>
+    <p class="explicacao" id="explicacao"></p>
+
+    <div class="ritual">
+      <p class="convite" id="convite"></p>
+      <ul class="litania" aria-label="As quatro palavras do ho'oponopono">
+        <li>Sinto muito.</li>
+        <li>Me perdoe.</li>
+        <li>Te amo.</li>
+        <li>Sou grato(a).</li>
+      </ul>
+      <p class="nota">Repita, mentalmente ou em voz alta, quantas vezes sentir necessidade.</p>
+    </div>
+
+    <div class="validacao">
+      <p class="rotulo">Para selar a limpeza de hoje</p>
+      <p class="frase" id="frase"></p>
+    </div>
+  </div>
+
+  <p class="carregando" id="carregando">Preparando a limpeza de hoje…</p>
+
+  <footer>
+    <button class="sair" id="btn-sair">Sair</button>
+  </footer>
+</section>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const supabase = createClient(
+  "https://chqbfwsllestvsifttps.supabase.co",
+  "sb_publishable_7cpboJAJaZqsRbOCHRrP3A_bEPXSBt3"
+);
+
+const $ = (id) => document.getElementById(id);
+const mostrar = (id) => { $("login").classList.add("oculto"); $("app").classList.add("oculto"); $(id).classList.remove("oculto"); };
+
+function diaDoAno() {
+  const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+  const acumulado = [0,31,59,90,120,151,181,212,243,273,304,334];
+  const m = agora.getMonth(), d = agora.getDate();
+  if (m === 1 && d === 29) return { dia: 59, data: agora }; // 29/02 repete a limpeza do dia 59
+  return { dia: acumulado[m] + d, data: agora };
+}
+
+function formatarData(data) {
+  const txt = data.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  return txt.charAt(0).toUpperCase() + txt.slice(1);
+}
+
+async function carregarLimpeza() {
+  mostrar("app");
+  const { dia, data } = diaDoAno();
+  $("data-hoje").textContent = formatarData(data);
+
+  const { data: limpeza, error } = await supabase.from("limpezas").select("*").eq("dia", dia).single();
+
+  if (error || !limpeza) {
+    $("carregando").textContent = "Não foi possível carregar a limpeza de hoje. Verifique sua conexão e recarregue a página.";
+    return;
+  }
+
+  $("eyebrow").textContent = limpeza.dia === 365
+    ? "Dia 365 · " + limpeza.ciclo
+    : "Dia " + limpeza.dia + " · Semana " + limpeza.semana + " · " + limpeza.ciclo;
+  $("chip-area").textContent = limpeza.area;
+  $("tema").textContent = limpeza.tema;
+  $("explicacao").textContent = limpeza.explicacao;
+
+  const idx = limpeza.orientacao.lastIndexOf(":");
+  $("convite").textContent = idx > 0 ? limpeza.orientacao.slice(0, idx) + "." : limpeza.orientacao;
+
+  $("frase").textContent = "\u201C" + limpeza.frase_validacao + "\u201D";
+
+  $("carregando").classList.add("oculto");
+  $("conteudo").classList.remove("oculto");
+}
+
+async function entrar() {
+  const btn = $("btn-entrar");
+  $("erro-login").textContent = "";
+  btn.disabled = true;
+  const { error } = await supabase.auth.signInWithPassword({
+    email: $("email").value.trim(),
+    password: $("senha").value
+  });
+  btn.disabled = false;
+  if (error) {
+    $("erro-login").textContent = "E-mail ou senha incorretos. Confira os dados e tente de novo.";
+    return;
+  }
+  carregarLimpeza();
+}
+
+$("btn-entrar").addEventListener("click", entrar);
+$("senha").addEventListener("keydown", (e) => { if (e.key === "Enter") entrar(); });
+$("btn-sair").addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  mostrar("login");
+});
+
+const { data: { session } } = await supabase.auth.getSession();
+if (session) { carregarLimpeza(); } else { mostrar("login"); }
+</script>
+</body>
+</html>
