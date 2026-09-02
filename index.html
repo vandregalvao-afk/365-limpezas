@@ -216,15 +216,13 @@ async function carregarLimpeza() {
     return;
   }
 
-  $("eyebrow").textContent = limpeza.dia === 365
-    ? "Dia 365 · " + limpeza.ciclo
-    : "Dia " + limpeza.dia + " · Semana " + limpeza.semana + " · " + limpeza.ciclo;
+  $("eyebrow").textContent = "Dia " + limpeza.dia + " de 365 · " + limpeza.ciclo;
   $("chip-area").textContent = limpeza.area;
   $("tema").textContent = limpeza.tema;
   $("explicacao").textContent = limpeza.explicacao;
 
-  const idx = limpeza.orientacao.lastIndexOf(":");
-  $("convite").textContent = idx > 0 ? limpeza.orientacao.slice(0, idx) + "." : limpeza.orientacao;
+  const corte = limpeza.orientacao.indexOf(". Respire");
+  $("convite").textContent = corte > 0 ? limpeza.orientacao.slice(0, corte + 1) : limpeza.orientacao;
 
   $("frase").textContent = "\u201C" + limpeza.frase_validacao + "\u201D";
 
@@ -260,3 +258,4 @@ if (session) { carregarLimpeza(); } else { mostrar("login"); }
 </script>
 </body>
 </html>
+
