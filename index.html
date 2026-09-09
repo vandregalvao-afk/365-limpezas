@@ -62,6 +62,11 @@
   button:disabled{opacity:.6;cursor:wait}
   .erro{margin-top:1rem;text-align:center;font-size:.9rem;color:#F0A9A0;min-height:1.3em}
   .aviso-login{margin-top:2.2rem;text-align:center;font-size:.82rem;color:var(--nevoa)}
+  .link-recuperar{
+    background:none;border:none;width:auto;display:block;margin:1.4rem auto 0;
+    color:var(--nevoa);text-decoration:underline;font-size:.85rem;padding:.2rem;cursor:pointer;
+  }
+  .msg-ok{margin-top:1rem;text-align:center;font-size:.9rem;color:var(--paz);min-height:1.3em}
 
   /* ---------- APP ---------- */
   header.dia-header{text-align:center;margin-bottom:2.4rem}
@@ -81,6 +86,11 @@
     text-align:center;margin:1.4rem 0 1.8rem;
   }
   .explicacao{font-size:1.04rem;font-weight:300;color:var(--luz)}
+  .rotulo-sec{
+    font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--aurora);text-align:center;margin:2.4rem 0 .9rem;
+  }
+  .ritual .rotulo-sec{margin-top:0}
 
   .ritual{
     margin:2.6rem 0;padding:2rem 1.4rem;
@@ -138,8 +148,22 @@
     <label for="senha">Senha</label>
     <input id="senha" type="password" autocomplete="current-password">
     <button id="btn-entrar">Entrar</button>
+    <button class="link-recuperar" id="btn-recuperar" type="button">Primeiro acesso ou esqueceu a senha?</button>
     <p class="erro" id="erro-login"></p>
+    <p class="msg-ok" id="ok-login"></p>
     <p class="aviso-login">Seu acesso é criado na assinatura do programa.<br>A senha chega no seu e-mail de boas-vindas.</p>
+  </div>
+</section>
+
+<!-- NOVA SENHA -->
+<section id="novasenha" class="tela oculto">
+  <div class="marca">Ho'oponopono Harmonia<span>365 limpezas · uma por dia</span></div>
+  <div class="login-caixa">
+    <h1>Defina a sua senha<br>de acesso</h1>
+    <label for="senha-nova">Nova senha</label>
+    <input id="senha-nova" type="password" autocomplete="new-password">
+    <button id="btn-salvar-senha">Salvar e entrar</button>
+    <p class="erro" id="erro-senha"></p>
   </div>
 </section>
 
@@ -154,9 +178,11 @@
 
   <div id="conteudo" class="oculto">
     <h2 class="tema" id="tema"></h2>
+    <p class="rotulo-sec">A memória</p>
     <p class="explicacao" id="explicacao"></p>
 
     <div class="ritual">
+      <p class="rotulo-sec">A prática</p>
       <p class="convite" id="convite"></p>
       <ul class="litania" aria-label="As quatro palavras do ho'oponopono">
         <li>Sinto muito.</li>
@@ -164,11 +190,10 @@
         <li>Te amo.</li>
         <li>Sou grato(a).</li>
       </ul>
-      <p class="nota">Repita, mentalmente ou em voz alta, quantas vezes sentir necessidade.</p>
     </div>
 
     <div class="validacao">
-      <p class="rotulo">Para selar a limpeza de hoje</p>
+      <p class="rotulo">O novo</p>
       <p class="frase" id="frase"></p>
     </div>
   </div>
@@ -189,7 +214,7 @@ const supabase = createClient(
 );
 
 const $ = (id) => document.getElementById(id);
-const mostrar = (id) => { $("login").classList.add("oculto"); $("app").classList.add("oculto"); $(id).classList.remove("oculto"); };
+const mostrar = (id) => { ["login","app","novasenha"].forEach((t) => $(t).classList.add("oculto")); $(id).classList.remove("oculto"); };
 
 function diaDoAno() {
   const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
@@ -221,8 +246,7 @@ async function carregarLimpeza() {
   $("tema").textContent = limpeza.tema;
   $("explicacao").textContent = limpeza.explicacao;
 
-  const corte = limpeza.orientacao.indexOf(". Respire");
-  $("convite").textContent = corte > 0 ? limpeza.orientacao.slice(0, corte + 1) : limpeza.orientacao;
+  $("convite").textContent = limpeza.orientacao;
 
   $("frase").textContent = "\u201C" + limpeza.frase_validacao + "\u201D";
 
@@ -253,9 +277,49 @@ $("btn-sair").addEventListener("click", async () => {
   mostrar("login");
 });
 
-const { data: { session } } = await supabase.auth.getSession();
-if (session) { carregarLimpeza(); } else { mostrar("login"); }
+$("btn-recuperar").addEventListener("click", async () => {
+  const email = $("email").value.trim();
+  $("erro-login").textContent = "";
+  $("ok-login").textContent = "";
+  if (!email) {
+    $("erro-login").textContent = "Digite seu e-mail no campo acima e toque aqui de novo.";
+    return;
+  }
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  });
+  if (error) {
+    $("erro-login").textContent = "Não foi possível enviar agora. Tente novamente em alguns minutos.";
+    return;
+  }
+  $("ok-login").textContent = "Pronto! Enviamos um link para o seu e-mail. Abra-o para definir a sua senha.";
+});
+
+$("btn-salvar-senha").addEventListener("click", async () => {
+  const nova = $("senha-nova").value;
+  $("erro-senha").textContent = "";
+  if (nova.length < 8) {
+    $("erro-senha").textContent = "Use uma senha com pelo menos 8 caracteres.";
+    return;
+  }
+  const { error } = await supabase.auth.updateUser({ password: nova });
+  if (error) {
+    $("erro-senha").textContent = "Não foi possível salvar. Abra novamente o link do e-mail e tente de novo.";
+    return;
+  }
+  history.replaceState(null, "", window.location.pathname);
+  carregarLimpeza();
+});
+
+supabase.auth.onAuthStateChange((evento) => {
+  if (evento === "PASSWORD_RECOVERY") { mostrar("novasenha"); }
+});
+
+const ehRecuperacao = window.location.hash.includes("type=recovery");
+if (!ehRecuperacao) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) { carregarLimpeza(); } else { mostrar("login"); }
+}
 </script>
 </body>
 </html>
-
