@@ -1,0 +1,13 @@
+{
+  "name": "365 Limpezas · Ho'oponopono Harmonia",
+  "short_name": "365 Limpezas",
+  "description": "Uma limpeza de ho'oponopono por dia, em todas as áreas da vida.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#181233",
+  "theme_color": "#181233",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
